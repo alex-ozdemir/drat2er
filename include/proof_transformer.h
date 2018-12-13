@@ -29,6 +29,7 @@
 #include <ostream>
 #include "lrat_parser.h"
 #include "progress_bar.h"
+#include "options.h"
 
 namespace drat2er
 {
@@ -50,8 +51,8 @@ class ProofTransformer : public LratParserObserver
   // printed when the Transform function is called. The parameter 
   // 'print_progress' indicates if a progress bar should print the current
   // progress of the proof transformation.
-  ProofTransformer(const std::string& verbose_message, 
-                   const bool print_progress);
+  ProofTransformer(const std::string& verbose_message,
+                   const options::VerbosityLevel verbosity);
 
   // Takes a path to an input file and transforms this input file, thereby
   // writing the result to the given output stream.
@@ -85,7 +86,7 @@ class ProofTransformer : public LratParserObserver
 
   std::ostream* output_stream_;
   std::string verbose_message_;
-  bool print_progress_;
+  options::VerbosityLevel verbosity_;
   int number_of_lines_processed_;
   ProgressBar progress_bar_;
 };

@@ -28,6 +28,7 @@
 #include <vector>
 #include <unordered_map>
 #include "proof_transformer.h"
+#include "options.h"
 
 namespace drat2er
 {
@@ -69,7 +70,7 @@ class RatEliminator : public ProofTransformer
   RatEliminator(std::shared_ptr<Formula> formula, 
                 const int max_variable,
                 const int max_instruction,
-                const bool print_progress=false);
+                const options::VerbosityLevel verbosity = options::NORMAL);
 
   // LratParserObserver interface: Processes proper RAT additions.
   virtual void HandleProperRatAddition(const RatClause& rat) override;

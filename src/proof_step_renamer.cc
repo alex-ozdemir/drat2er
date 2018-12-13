@@ -35,9 +35,9 @@ namespace drat2er
 {
 
 ProofStepRenamer::ProofStepRenamer(const int index_of_first_proof_step,
-                                   const bool is_verbose)
+                                   const options::VerbosityLevel verbosity)
                       : ProofTransformer("Renaming proof steps incrementally.",
-                                         is_verbose),
+                                         verbosity),
                         clause_renaming_ {},
                         index_of_next_step_ {index_of_first_proof_step} {}
 

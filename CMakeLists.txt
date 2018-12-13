@@ -34,6 +34,7 @@ add_library(lib_drat2er STATIC
 	src/proof_step_renamer.cc
 	src/file_helper.cc
 	src/drat_trim_interface.cc
+	src/drat2er.cc
 	src/progress_bar.cc
 	)
 target_link_libraries(lib_drat2er drat-trim)

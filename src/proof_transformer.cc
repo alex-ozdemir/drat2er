@@ -41,10 +41,10 @@ namespace drat2er
 {
 
 ProofTransformer::ProofTransformer(const std::string& verbose_message,
-                                   const bool print_progress)
+                                   const options::VerbosityLevel verbosity)
                                         : output_stream_ {nullptr},
                                           verbose_message_ {verbose_message},
-                                          print_progress_ {print_progress},
+                                          verbosity_ {verbosity},
                                           number_of_lines_processed_ {0},
                                           progress_bar_ {} { }
 
@@ -129,12 +129,15 @@ void ProofTransformer::HandleExtension(const Clause& extension)
 
 void ProofTransformer::PrintVerboseMessage() const
 {
-  cout << "c drat2er: " << verbose_message_ << endl;
+  if (verbosity_ > options::QUIET)
+  {
+    cout << "c drat2er: " << verbose_message_ << endl;
+  }
 }
 
 void ProofTransformer::InitProgressBar(const std::string& input_file)
 {
-  if(print_progress_) {
+  if(verbosity_ >= options::VERBOSE) {
     progress_bar_.SetOverallNumberOfItems(1);
     PrintProgress(false);
     progress_bar_.SetOverallNumberOfItems(
@@ -145,7 +148,7 @@ void ProofTransformer::InitProgressBar(const std::string& input_file)
 
 void ProofTransformer::PrintProgress(bool increment_number_of_lines_processed)
 {
-  if(print_progress_) {
+  if(verbosity_ >= options::VERBOSE) {
     if(increment_number_of_lines_processed) {
       ++number_of_lines_processed_;
     }

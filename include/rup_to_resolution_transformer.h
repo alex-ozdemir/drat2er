@@ -26,6 +26,7 @@
 #include <memory>
 #include <iostream>
 #include "proof_transformer.h"
+#include "options.h"
 
 namespace drat2er
 {
@@ -49,7 +50,7 @@ class RupToResolutionTransformer : public ProofTransformer
   // printed on the standard output to indicate the progress.
   RupToResolutionTransformer(std::shared_ptr<Formula> formula,
                              const bool is_output_drat = false,
-                             const bool print_progress = false);
+                             const options::VerbosityLevel verbosity = options::NORMAL);
 
  protected:
   virtual void HandleRupAddition(const RupClause& rup) override;

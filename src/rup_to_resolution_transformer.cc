@@ -38,9 +38,9 @@ namespace drat2er
 RupToResolutionTransformer::RupToResolutionTransformer(
     shared_ptr<Formula> formula,
     const bool is_output_drat,
-    const bool print_progress)
+    const options::VerbosityLevel verbosity)
     : ProofTransformer("Transforming RUPs to resolution chains.",
-                       print_progress),
+                       verbosity),
       formula_ {formula},
       is_output_drat_{is_output_drat},
       found_empty_clause_ {false} {}

@@ -20,30 +20,17 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 // IN THE SOFTWARE.
 
-#ifndef DRAT2ER_DRAT_TRIM_H
-#define DRAT2ER_DRAT_TRIM_H
+#ifndef DRAT2ER_OPTIONS_H
+#define DRAT2ER_OPTIONS_H
+namespace drat2er {
+namespace options {
 
-#include <string>
-#include <vector>
+enum VerbosityLevel {
+  QUIET,
+  NORMAL,
+  VERBOSE
+};
 
-#include "options.h"
-
-namespace drat2er
-{
-
-namespace drat_trim
-{
-
-// Calls drat-trim to transform a given formula and a given proof to an
-// LRAT proof. If 'is_verbose' is true, the status of the transformation is
-// printed using a progress bar.
-int CheckAndConvertToLRAT(const std::string& input_formula_path,
-                          const std::string& input_proof_path,
-                          const std::string& output_proof_path,
-                          const options::VerbosityLevel verbosity);
-
-} // namespace drat_trim
-
-} // namespace drat2er
-
+}
+}
 #endif

@@ -21,6 +21,7 @@
 // IN THE SOFTWARE.
 
 #include "drat_trim_interface.h"
+#include "options.h"
 #include <cstring>
 #include <string>
 #include <vector>
@@ -42,14 +43,21 @@ namespace drat_trim
 int CheckAndConvertToLRAT(const string& input_formula_path,
                           const string& input_proof_path,
                           const string& output_proof_path, 
-                          const bool is_verbose)
+                          const options::VerbosityLevel verbosity)
 {
   vector<string> args;
   args.push_back("");
   args.push_back(input_formula_path);
   args.push_back(input_proof_path);
-  if(is_verbose) {
-    args.push_back("-b");
+  switch (verbosity) {
+    case options::VERBOSE:
+      args.push_back("-b");
+      break;
+    case options::QUIET:
+      args.push_back("-q");
+      break;
+    default:
+      break;
   }
   args.push_back("-L");
   args.push_back(output_proof_path);
