@@ -38,6 +38,7 @@ add_library(lib_drat2er STATIC
 	src/drat2er.cc
 	src/progress_bar.cc
 	)
+set_target_properties(lib_drat2er PROPERTIES OUTPUT_NAME drat2er)
 target_link_libraries(lib_drat2er drat-trim)
 
 # Include the CLI11 command line parsing library
