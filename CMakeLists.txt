@@ -12,7 +12,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install)
 
 # Include drat-trim as a library
 add_library(drat-trim STATIC third-party/drat-trim/drat-trim.c)
