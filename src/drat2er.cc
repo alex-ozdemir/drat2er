@@ -36,7 +36,7 @@
 #include "lrat_parser.h"
 #include "proof_stat_collector.h"
 #include "drat_trim_interface.h"
-#include "options.h"
+#include "drat2er_options.h"
 
 using std::string;
 using std::make_shared;

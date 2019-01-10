@@ -24,7 +24,7 @@
 #define DRAT2ER_H
 
 #include <string>
-#include "options.h"
+#include "drat2er_options.h"
 
 namespace drat2er {
 

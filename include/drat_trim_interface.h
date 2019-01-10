@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 
-#include "options.h"
+#include "drat2er_options.h"
 
 namespace drat2er
 {

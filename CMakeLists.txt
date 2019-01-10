@@ -15,6 +15,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Include drat-trim as a library
 add_library(drat-trim STATIC third-party/drat-trim/drat-trim.c)
+set_property(TARGET drat-trim PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # Build library for the main executable 
 add_library(lib_drat2er STATIC 
@@ -29,7 +30,7 @@ add_library(lib_drat2er STATIC
 	src/lrat_parser.cc
 	src/proof_transformer.cc
 	src/rat_eliminator.cc
-  	src/proof_stat_collector.cc
+	src/proof_stat_collector.cc
 	src/rup_to_resolution_transformer.cc
 	src/proof_step_renamer.cc
 	src/file_helper.cc
@@ -37,7 +38,7 @@ add_library(lib_drat2er STATIC
 	src/drat2er.cc
 	src/progress_bar.cc
 	)
-set_target_properties(lib_drat2er PROPERTIES OUTPUT_NAME drat2er)
+set_target_properties(lib_drat2er PROPERTIES OUTPUT_NAME drat2er POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(lib_drat2er drat-trim)
 
 # Include the CLI11 command line parsing library
@@ -73,7 +74,7 @@ add_test(NAME UnitTests COMMAND unit_tests)
 install(TARGETS drat2er lib_drat2er drat-trim
         RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
         ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-install(FILES include/drat2er.h include/drat_trim_interface.h
+install(FILES include/drat2er.h include/drat_trim_interface.h include/drat2er_options.h
         DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
 
 

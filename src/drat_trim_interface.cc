@@ -21,7 +21,7 @@
 // IN THE SOFTWARE.
 
 #include "drat_trim_interface.h"
-#include "options.h"
+#include "drat2er_options.h"
 #include <cstring>
 #include <string>
 #include <vector>
