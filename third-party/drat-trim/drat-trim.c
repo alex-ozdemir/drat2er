@@ -2040,7 +2040,6 @@ int run_drat_trim (int argc, char** argv)
           int c = getc_unlocked (S.proofFile);
           if (c == EOF) break;
           if ((c != 100) && (c != 10) && (c != 13) && (c != 32) && (c != 45) && ((c < 48) || (c > 57)) && ((c < 65) || (c > 122)))  {
-            qprintf ("\rc turning on binary mode checking\n");
             S.binMode = 1;
             break;
           }
