@@ -24,6 +24,7 @@
 #include <cassert>
 #include <string>
 #include <sstream>
+#include <unordered_set>
 #include <fstream>
 #include <vector>
 #include "rat_clause.h"
@@ -197,11 +198,15 @@ Clause LratParser::ParseExtension(const string& proof_line)
 void LratParser::ParseClausePart(Clause& clause, stringstream& line_stream)
 {
   int token;
+  std::unordered_set<int> literalsPresent;
   line_stream >> token;
   clause.SetIndex(token);
   line_stream >> token;
   while(token != 0) {
-    clause.AddLiteral(token);
+    if (!literalsPresent.count(token)) {
+      literalsPresent.insert(token);
+      clause.AddLiteral(token);
+    }
     line_stream >> token;
   }
 }

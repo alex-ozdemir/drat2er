@@ -25,6 +25,7 @@
 #include <fstream>
 #include <sstream>
 #include <memory>
+#include <unordered_set>
 #include "formula.h"
 #include "clause.h"
 
@@ -115,11 +116,16 @@ FormulaParser::FormulaProperties
 Clause FormulaParser::ParseClause(const string& clause_line) const
 {
   Clause clause;
+  std::unordered_set<int> literalsPresent;
+
   stringstream line_stream {clause_line};
   int literal = 0;
   line_stream >> literal;
   while(!line_stream.fail() && literal != 0) {
-    clause.AddLiteral(literal);
+    if (!literalsPresent.count(literal)) {
+      literalsPresent.insert(literal);
+      clause.AddLiteral(literal);
+    }
     line_stream >> literal;
   }
 
