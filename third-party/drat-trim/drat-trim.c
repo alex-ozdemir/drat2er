@@ -517,6 +517,7 @@ void printProof (struct solver *S)
     printLRATline (S, S->count);
 
     fclose (S->lratFile);
+    S->lratFile = 0;
     if (S->nWrites)
       qprintf ("c wrote optimized proof in LRAT format of %li bytes\n", S->nWrites);
   }
@@ -2094,6 +2095,11 @@ int run_drat_trim (int argc, char** argv)
     }
   }
 
+  if (S.lratFile)
+  {
+    fclose(S.lratFile);
+    S.lratFile = 0;
+  }
   freeMemory (&S);
   return (sts != UNSAT); // 0 on success, 1 on any failure
 }
