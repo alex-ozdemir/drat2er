@@ -70,6 +70,37 @@ int CheckAndConvertToLRAT(const string& input_formula_path,
   return run_drat_trim(args_c_strings.size(), args_c_strings.data());
 }
 
+int OptimizeWithDratTrim(const string& input_formula_path,
+                         const string& input_proof_path,
+                         const string& output_proof_path, 
+                         const options::VerbosityLevel verbosity)
+{
+  vector<string> args;
+  args.push_back("");
+  args.push_back(input_formula_path);
+  args.push_back(input_proof_path);
+  switch (verbosity) {
+    case options::VERBOSE:
+      args.push_back("-b");
+      break;
+    case options::QUIET:
+      args.push_back("-q");
+      break;
+    default:
+      break;
+  }
+  args.push_back("-C"); // Binary output
+  args.push_back("-l"); // DRAT output
+  args.push_back(output_proof_path);
+
+  vector<char*> args_c_strings;
+  for(auto& argument : args) {
+    args_c_strings.push_back(&argument.front());
+  }
+
+  return run_drat_trim(args_c_strings.size(), args_c_strings.data());
+}
+
 } // namespace drat_trim
 
 } // namespace drat2er

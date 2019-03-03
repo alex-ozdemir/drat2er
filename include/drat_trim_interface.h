@@ -42,6 +42,12 @@ int CheckAndConvertToLRAT(const std::string& input_formula_path,
                           const std::string& output_proof_path,
                           const options::VerbosityLevel verbosity);
 
+// Calls drat-trim to check and optimize a proof.
+int OptimizeWithDratTrim(const std::string& input_formula_path,
+                         const std::string& input_proof_path,
+                         const std::string& output_proof_path,
+                         const options::VerbosityLevel verbosity);
+
 } // namespace drat_trim
 
 } // namespace drat2er
