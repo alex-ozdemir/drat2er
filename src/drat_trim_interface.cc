@@ -72,7 +72,8 @@ int CheckAndConvertToLRAT(const string& input_formula_path,
 
 int OptimizeWithDratTrim(const string& input_formula_path,
                          const string& input_proof_path,
-                         const string& output_proof_path, 
+                         const string& output_formula_path,
+                         const string& output_proof_path,
                          const options::VerbosityLevel verbosity)
 {
   vector<string> args;
@@ -92,6 +93,8 @@ int OptimizeWithDratTrim(const string& input_formula_path,
   args.push_back("-C"); // Binary output
   args.push_back("-l"); // DRAT output
   args.push_back(output_proof_path);
+  args.push_back("-c");
+  args.push_back(output_formula_path);
 
   vector<char*> args_c_strings;
   for(auto& argument : args) {
