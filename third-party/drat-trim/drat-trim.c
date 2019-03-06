@@ -1143,7 +1143,8 @@ int init (struct solver *S)
       }
       if (S->lemmaStr) {
         FILE *lemmaFile = fopen (S->lemmaStr, "w");
-        fprintf (lemmaFile, "0\n");
+        if (S->binOutput) { fputc ('a', lemmaFile); write_lit (S, lemmaFile, 0); }
+        else { fprintf (lemmaFile, "0\n"); }
         fclose (lemmaFile);
       }
       if (S->lratFile) {
@@ -1153,6 +1154,7 @@ int init (struct solver *S)
           if ((_clause[0] == -clause[0]) && !_clause[1]) break;
         }
         fprintf (S->lratFile, "%li 0 %i %i 0\n", S->nClauses + 1, j + 1, i + 1);
+        fclose(S->lratFile);
       }
       return UNSAT;
     } else if (!S->falseA[ -clause[0] ]) {
@@ -2044,13 +2046,13 @@ int run_drat_trim (int argc, char** argv)
        if (S.binMode == 0) {
           c = getc_unlocked (S.proofFile); // check the first character in the file
           if (c == EOF) { S.binMode = 1; continue; }
-          if ((c != 13) && (c != 32) && (c != 45) && ((c < 48) || (c > 57)) && (c != 99) && (c != 100)) {
+          if ((c != 10) && (c != 13) && (c != 32) && (c != 45) && ((c < 48) || (c > 57)) && (c != 99) && (c != 100)) {
              S.binMode = 1; }
           if (c != 99) comment = 0; }
         if (S.binMode == 0) {
           c = getc_unlocked (S.proofFile); // check the second character in the file
           if (c == EOF) { S.binMode = 1; continue; }
-          if ((c != 13) && (c != 32) && (c != 45) && ((c < 48) || (c > 57)) && (c != 99) && (c != 100)) {
+          if ((c != 10) && (c != 13) && (c != 32) && (c != 45) && ((c < 48) || (c > 57)) && (c != 99) && (c != 100)) {
              S.binMode = 1; }
           if (c != 32) comment = 0; }
         if (S.binMode == 0) {
