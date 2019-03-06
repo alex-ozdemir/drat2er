@@ -20,20 +20,34 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 // IN THE SOFTWARE.
 
-#ifndef DRAT2ER_H
-#define DRAT2ER_H
+#ifndef DRAT2ER_UNUSED_CLAUSE_ELIMINATOR_H_
+#define DRAT2ER_UNUSED_CLAUSE_ELIMINATOR_H_
 
-#include <string>
-#include "drat2er_options.h"
+#include "proof_transformer.h"
+#include <unordered_set>
 
-namespace drat2er {
+namespace drat2er
+{
 
-void TransformDRATToExtendedResolution(const std::string& input_formula_file,
-                                       const std::string& input_proof_file,
-                                       const std::string& output_file,
-                                       bool is_output_drat,
-                                       options::VerbosityLevel verbosity,
-                                       bool is_compressed);
+// Takes an LRAT proof and removes all clauses that are not used in later
+// proof steps
+class UnusedClauseEliminator : public ProofTransformer
+{
 
-}
+ public:
+  UnusedClauseEliminator(const options::VerbosityLevel print_progress = options::NORMAL);
+
+ protected:
+  virtual void HandleProperRatAddition(const RatClause& rat) override;
+  virtual void HandleRupAddition(const RupClause& rup) override;
+  virtual void HandleDeletion(const Deletion& deletion) override;
+  virtual void HandleExtension(const Clause& extension) override;
+
+ private:
+  std::unordered_set<int> used_clauses_;
+
+};
+
+} // namespace drat2er
+
 #endif

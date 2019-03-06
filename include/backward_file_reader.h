@@ -20,20 +20,28 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 // IN THE SOFTWARE.
 
-#ifndef DRAT2ER_H
-#define DRAT2ER_H
+#ifndef DRAT2ER_BACKWARD_FILE_READER_H_
+#define DRAT2ER_BACKWARD_FILE_READER_H_
 
+#include "file_reader.h"
 #include <string>
-#include "drat2er_options.h"
+#include <fstream>
 
-namespace drat2er {
+namespace drat2er
+{
 
-void TransformDRATToExtendedResolution(const std::string& input_formula_file,
-                                       const std::string& input_proof_file,
-                                       const std::string& output_file,
-                                       bool is_output_drat,
-                                       options::VerbosityLevel verbosity,
-                                       bool is_compressed);
+// Reads a file backwards line by line.
+class BackwardFileReader : public FileReader
+{
+ public:
+   BackwardFileReader(std::string file_path);
+   virtual bool GetLine(std::string& line) override;
 
-}
+ private:
+   std::ifstream input_file_stream_;
+   long long file_position_;
+};
+
+} // namespace drat2er
+
 #endif

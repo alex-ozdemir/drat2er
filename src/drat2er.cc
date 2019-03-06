@@ -31,6 +31,8 @@
 #include "formula.h"
 #include "formula_parser.h"
 #include "rat_eliminator.h"
+#include "proof_reverser.h"
+#include "unused_clause_eliminator.h"
 #include "rup_to_resolution_transformer.h"
 #include "proof_step_renamer.h"
 #include "lrat_parser.h"
@@ -52,6 +54,7 @@ using namespace drat2er::options;
 // File names for temp files used during the transformation.
 const string kTempFileLRAT = "temp.lrat";
 const string kTempFileERUP = "temp.erup";
+const string kTempFileERUPShrinked = "temp.erups";
 const string kTempFileER = "temp_unrenamed.er";
 
 // Takes as input the path to a DIMACS file, parses the file and creates
@@ -75,8 +78,7 @@ void TransformDRATToLRAT(const string& input_formula_file,
 {
   if (verbosity > QUIET)
   {
-    cout << "c drat2er: Verifying DRAT proof and converting it to"
-         " LRAT format using drat-trim." << endl;
+      cout << "c drat2er: Converting DRAT proof to LRAT using drat-trim." << endl;
   }
   if(drat_trim::CheckAndConvertToLRAT(input_formula_file, input_proof_file,
                                       output_proof_file, verbosity)) {
@@ -107,6 +109,24 @@ void EliminateProperRATs(const Formula& original_formula,
   rat_eliminator.Transform(input_proof_file, output_proof_file);
   std::remove(input_proof_file.c_str());
 }
+
+// Takes as input a an LRAT proof and deletes all clauses that are not used
+// in later proof steps.
+void EliminateUnusedClauses(const string& input_proof_file,
+                            const string& output_proof_file, VerbosityLevel is_verbose)
+{
+  const string kTempProofFile = "temp_unused.erup";
+
+  UnusedClauseEliminator eliminator(is_verbose);
+  eliminator.Transform(input_proof_file, kTempProofFile);
+
+  ProofReverser reverser(is_verbose);
+  reverser.Transform(kTempProofFile, output_proof_file);
+
+  std::remove(kTempProofFile.c_str());
+  std::remove(input_proof_file.c_str());
+}
+
 
 // Takes as input an ERUP proof (i.e., a proof containing only extensions
 // and RUP additions) and transforms all RUP additions into resolution chains.
@@ -154,7 +174,8 @@ void TransformDRATToExtendedResolution(const string& input_formula_file,
                                        const string& input_proof_file,
                                        const string& output_file,
                                        bool is_output_drat,
-                                       VerbosityLevel verbosity)
+                                       VerbosityLevel verbosity,
+                                       bool is_compressed)
 {
   TransformDRATToLRAT(input_formula_file, input_proof_file,
                       kTempFileLRAT, verbosity);
@@ -163,9 +184,14 @@ void TransformDRATToExtendedResolution(const string& input_formula_file,
 
   EliminateProperRATs(formula, kTempFileLRAT, kTempFileERUP, verbosity);
 
-  TransformRUPsToResolutions(formula, kTempFileERUP, kTempFileER, 
+  if(is_compressed){
+    EliminateUnusedClauses(kTempFileERUP, kTempFileERUPShrinked, verbosity);
+  }
+
+  auto input_proof = is_compressed ? kTempFileERUPShrinked : kTempFileERUP;
+  TransformRUPsToResolutions(formula, input_proof, kTempFileER,
                              is_output_drat, verbosity);
-  
+
   if(is_output_drat){ 
     // We are already done, just rename the existing temp file.
     std::rename(kTempFileER.c_str(), output_file.c_str());

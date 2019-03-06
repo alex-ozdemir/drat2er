@@ -20,20 +20,29 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 // IN THE SOFTWARE.
 
-#ifndef DRAT2ER_H
-#define DRAT2ER_H
+#ifndef DRAT2ER_PROOF_REVERSER_H_
+#define DRAT2ER_PROOF_REVERSER_H_
 
-#include <string>
-#include "drat2er_options.h"
+#include "proof_transformer.h"
 
-namespace drat2er {
+namespace drat2er
+{
 
-void TransformDRATToExtendedResolution(const std::string& input_formula_file,
-                                       const std::string& input_proof_file,
-                                       const std::string& output_file,
-                                       bool is_output_drat,
-                                       options::VerbosityLevel verbosity,
-                                       bool is_compressed);
+// Takes an LRAT proof and reverses the order of the proof steps
+class ProofReverser : public ProofTransformer
+{
 
-}
+ public:
+  ProofReverser(const options::VerbosityLevel verbosity = options::NORMAL);
+
+ protected:
+  virtual void HandleProperRatAddition(const RatClause& rat) override;
+  virtual void HandleRupAddition(const RupClause& rup) override;
+  virtual void HandleDeletion(const Deletion& deletion) override;
+  virtual void HandleExtension(const Clause& extension) override;
+
+};
+
+} // namespace drat2er
+
 #endif

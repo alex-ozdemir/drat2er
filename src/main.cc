@@ -71,6 +71,10 @@ int main (int argc, char *argv[])
   bool is_quiet = false;
   app.add_flag("-q,--quiet", is_quiet, "Suppress all output");
 
+  bool is_compressed = false;
+  app.add_flag("-c,--compress", is_compressed, 
+               "Reduce proof size (increases runtime).");
+
   string output_format = "tracecheck";
   app.add_set("-f,--format", output_format, {"drat", "tracecheck"},
               "Format of the output proof (default: tracecheck).");
@@ -87,7 +91,8 @@ int main (int argc, char *argv[])
                                       input_proof_path,
                                       output_file_path, 
                                       output_format == "drat", 
-                                      verbosity);
+                                      verbosity,
+                                      is_compressed);
     if (verbosity > QUIET)
     {
       cout << "c drat2er: Proof successfully transformed." << endl;
