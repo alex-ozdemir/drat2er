@@ -26,6 +26,8 @@
 #include <ostream>
 #include <memory>
 #include <stdexcept>
+#include <stdlib.h>
+#include <unistd.h>
 #include <string>
 #include <algorithm>
 #include "formula.h"
@@ -52,10 +54,10 @@ namespace drat2er {
 using namespace drat2er::options;
 
 // File names for temp files used during the transformation.
-const string kTempFileLRAT = "temp.lrat";
-const string kTempFileERUP = "temp.erup";
-const string kTempFileERUPShrinked = "temp.erups";
-const string kTempFileER = "temp_unrenamed.er";
+char kTempFileLRAT[] = "/tmp/drat2er-lrat-XXXXXX";
+char kTempFileERUP[] = "/tmp/drat2er-erup-XXXXXX";
+char kTempFileERUPShrinked[] = "/tmp/drat2er-erups-XXXXXX";
+char kTempFileER[] = "/tmp/drat2er-er-XXXXXX";
 
 // Takes as input the path to a DIMACS file, parses the file and creates
 // a formula object. Returns a pointer to the formula object.
@@ -177,6 +179,17 @@ void TransformDRATToExtendedResolution(const string& input_formula_file,
                                        VerbosityLevel verbosity,
                                        bool is_compressed)
 {
+
+  int tempFd;
+  tempFd = mkstemp(kTempFileLRAT);
+  close(tempFd);
+  tempFd = mkstemp(kTempFileERUP);
+  close(tempFd);
+  tempFd = mkstemp(kTempFileERUPShrinked);
+  close(tempFd);
+  tempFd = mkstemp(kTempFileLRAT);
+  close(tempFd);
+
   TransformDRATToLRAT(input_formula_file, input_proof_file,
                       kTempFileLRAT, verbosity);
 
@@ -194,7 +207,7 @@ void TransformDRATToExtendedResolution(const string& input_formula_file,
 
   if(is_output_drat){ 
     // We are already done, just rename the existing temp file.
-    std::rename(kTempFileER.c_str(), output_file.c_str());
+    std::rename(kTempFileER, output_file.c_str());
   } else {
     RenameProofStepsIncrementally(formula, kTempFileER, 
                                   output_file, verbosity);
